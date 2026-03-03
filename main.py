@@ -1,32 +1,30 @@
 import streamlit as st
 
-# Configuração da página para o estilo Clean/SaaS Moderno
+# Configuração da página para o estilo Clean SaaS
 st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide")
 
-# --- CSS Customizado (Baseado na Referência Clean/Puzzle) ---
+# --- CSS Customizado (Estilo Puzzle com Glow Azul #00C3FF) ---
 st.markdown("""
 <style>
-    /* Importando uma fonte mais clean (Poppins) */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
     
-    html, body, {
+    html, body, [data-testid="stSidebar"] {
         font-family: 'Poppins', sans-serif;
     }
 
-    /* Fundo Grafite Super Escuro (Clean Dark) */
+    /* Fundo Grafite Profundo */
     .main { background-color: #0b0c0f; }
     
-    /* Título Limpo e Moderno */
+    /* Título Limpo */
     .hero-title {
         text-align: center;
         font-size: 2.8rem !important;
         font-weight: 800;
-        color: #ffffff; /* Texto branco puro no título */
-        margin-bottom: 0px;
+        color: #ffffff;
+        margin-bottom: 5px;
         letter-spacing: -1px;
     }
     
-    /* Subtítulo em Cinza Claro */
     .hero-subtitle {
         text-align: center;
         color: #8a8d91;
@@ -35,10 +33,10 @@ st.markdown("""
         margin-bottom: 3rem;
     }
 
-    /* Estilo do Card com Borda Sutil e Glow Verde-Menta ao passar o mouse */
+    /* Estilo do Card Clean */
     .card {
-        background-color: #14161a; /* Fundo do Card levemente mais claro */
-        border: 1px solid #1c1f24; /* Borda inicial quase invisível */
+        background-color: #14161a;
+        border: 1px solid #1c1f24;
         border-radius: 12px;
         padding: 24px;
         transition: 0.3s ease-in-out;
@@ -50,11 +48,11 @@ st.markdown("""
         justify-content: space-between;
     }
     
-    /* Efeito de hover (Glow Verde-Menta Suave) */
+    /* Efeito de hover com o Azul Solicitado #00C3FF */
     .card:hover {
         transform: translateY(-3px);
-        border-color: #00C3FF; /* Verde-menta sutil na borda */
-        box-shadow: 0 0 20px rgba(0, 230, 118, 0.3); /* Glow verde sutil */
+        border-color: #00C3FF; /* Azul sutil na borda */
+        box-shadow: 0 0 20px rgba(0, 195, 255, 0.3); /* Glow azul sutil */
     }
 
     .card-title {
@@ -67,24 +65,16 @@ st.markdown("""
     .status-label { 
         color: #8a8d91; 
         font-size: 0.85rem; 
-        font-weight: 300;
         margin: 0;
     }
     
-    /* Verde-menta suave para o status concluído */
+    /* Azul para o valor do status */
     .status-value { 
         color: #00C3FF; 
         font-weight: 600; 
     }
     
-    /* Remove sublinhado dos links */
     a { text-decoration: none !important; }
-    
-    /* Estilizando a barra lateral para combinar */
-    {
-        background-color: #14161a;
-        border-right: 1px solid #1c1f24;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -95,10 +85,10 @@ st.markdown('<p class="hero-subtitle">Soluções tecnológicas integradas para o
 st.divider()
 st.markdown("### 🛠️ Seus Projetos em Andamento")
 
-# Função para criar o card clicável com tratamento de erro para os segredos
+# Função para criar o card clicável corrigida
 def criar_card_clean(titulo, status, chave_url):
-    # Tenta buscar a URL nos segredos, se não existir, usa um link padrão
     try:
+        # Acessando os segredos de forma segura
         url = st.secrets["urls"][chave_url]
     except:
         url = "#"
@@ -113,7 +103,7 @@ def criar_card_clean(titulo, status, chave_url):
     """
     return st.markdown(card_html, unsafe_allow_html=True)
 
-# --- GRID DE CARDS CLEAN ---
+# --- GRID DE CARDS ---
 col1, col2, col3 = st.columns(3)
 
 with col1:
