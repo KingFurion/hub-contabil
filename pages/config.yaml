@@ -1,0 +1,46 @@
+# Arquivos
+arquivo_entrada: Extrato_Mensal.xlsx
+arquivo_saida: Tabela_Completa_Unica.xlsx
+
+# Colunas informadas como letras (A, B, AD, BU)
+colunas:
+  proventos:
+    rubrica: B
+    descricao: I
+    valor: AD
+  descontos:
+    rubrica: AN
+    descricao: AS
+    valor: BU
+  informativa:
+    descricao: AB
+    valor: AQ
+
+# Ordem dos tipos por C.Custo
+ordenacao:
+  - PROVENTOS
+  - DESCONTOS
+  - INFORMATIVA
+
+# Controle de data
+data:
+  modo: auto # auto | fixa | competencia
+  fixa: "31/10/2025" # quando modo = fixa (DD/MM/YYYY ou YYYY-MM-DD)
+  competencia: "2025-10" # quando modo = competencia (YYYY-MM)
+  deslocamento_meses: 0 # +1 / -1 etc.
+  formato_saida: "%d/%m/%Y" # formato final
+
+# Deduplicação
+deduplicacao:
+  estrategia: drop_duplicates # ou 'sum' para somar valores iguais
+  chaves:
+    - C.Custo
+    - Tipo
+    - Rubrica
+    - Descrição
+    - Valor
+  arredondar_valor: 2
+
+# Captura
+captura:
+  apenas_primeiro_resumo_por_cc: false
