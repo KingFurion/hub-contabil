@@ -73,7 +73,7 @@ st.markdown("""
     
     /* Verde-menta suave para o status concluído */
     .status-value { 
-        color: #00e676; 
+        color: #00C3FF; 
         font-weight: 600; 
     }
     
