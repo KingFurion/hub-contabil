@@ -105,7 +105,7 @@ def criar_card_clean(titulo, status, chave_url):
 col1, col2 = st.columns(2)
 
 with col1:
-    criar_card_clean("🧬 Zoox Tecnologia", "Automação Concluída", "zoox")
+    criar_card_clean("Zoox Tecnologia", "Automação de Folha para CMFlex", "zoox")
 
 with col2:
-    criar_card_clean("📚 Estante Mágica", "Folha Contábil OK", "estante")
+    criar_card_clean("Estante Mágica", "Automação de Folha para MXM", "estante")
