@@ -45,21 +45,21 @@ st.markdown("""
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
     }
     
-    /* Efeito de hover com o Azul Solicitado #00C3FF */
+    /* Efeito de hover com Azul #00C3FF */
     .card:hover {
         transform: translateY(-3px);
-        border-color: #00C3FF; /* Azul sutil na borda */
-        box-shadow: 0 0 20px rgba(0, 195, 255, 0.3); /* Glow azul sutil */
+        border-color: #00C3FF;
+        box-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
     }
 
     .card-title {
         color: #ffffff;
         font-size: 1.2rem;
         font-weight: 600;
-        margin: 0;
+        margin-bottom: 8px;
     }
 
     .status-label { 
@@ -68,7 +68,6 @@ st.markdown("""
         margin: 0;
     }
     
-    /* Azul para o valor do status */
     .status-value { 
         color: #00C3FF; 
         font-weight: 600; 
@@ -83,12 +82,11 @@ st.markdown('<p class="hero-title">Hub de Inteligência Contábil que Transforma
 st.markdown('<p class="hero-subtitle">Soluções tecnológicas integradas para o BPO de alta performance.</p>', unsafe_allow_html=True)
 
 st.divider()
-st.markdown("### 🛠️ Seus Projetos em Andamento")
+st.markdown("### 🛠️ Automação de Folha x Contábil")
 
-# Função para criar o card clicável corrigida
+# Função para criar o card clicável
 def criar_card_clean(titulo, status, chave_url):
     try:
-        # Acessando os segredos de forma segura
         url = st.secrets["urls"][chave_url]
     except:
         url = "#"
@@ -103,17 +101,11 @@ def criar_card_clean(titulo, status, chave_url):
     """
     return st.markdown(card_html, unsafe_allow_html=True)
 
-# --- GRID DE CARDS ---
-col1, col2, col3 = st.columns(3)
+# --- GRID COM APENAS 2 CARDS ---
+col1, col2 = st.columns(2)
 
 with col1:
-    criar_card_clean("📊 Dashboard", "Automação Concluída", "dashboard")
-    criar_card_clean("🌾 Grupo Trigo", "Etapa de Folha OK", "trigo")
+    criar_card_clean("🧬 Zoox Tecnologia", "Automação Concluída", "zoox")
 
 with col2:
-    criar_card_clean("🧬 Zoox Tecnologia", "Automação Concluída", "zoox")
-    criar_card_clean("🏷️ TAGME", "Rotina Configurada", "tagme")
-
-with col3:
     criar_card_clean("📚 Estante Mágica", "Folha Contábil OK", "estante")
-    criar_card_clean("📈 Próximos Passos", "Livro Contábil", "proximos")
