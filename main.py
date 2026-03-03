@@ -53,7 +53,7 @@ st.markdown("""
     /* Efeito de hover (Glow Verde-Menta Suave) */
     .card:hover {
         transform: translateY(-3px);
-        border-color: #00e676; /* Verde-menta sutil na borda */
+        border-color: #00C3FF; /* Verde-menta sutil na borda */
         box-shadow: 0 0 20px rgba(0, 230, 118, 0.3); /* Glow verde sutil */
     }
 
