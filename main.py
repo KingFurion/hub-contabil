@@ -10,7 +10,7 @@ if 'pagina_ativa' not in st.session_state:
 def mudar_pagina(nome):
     st.session_state.pagina_ativa = nome
 
-# --- CSS REFINADO ---
+# --- CSS REFINADO E ISOLADO ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
@@ -18,7 +18,7 @@ st.markdown("""
     [data-testid="stSidebar"], header { display: none; }
     .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Container do Card */
+    /* Estilo do Card Visual */
     .card-container {
         background-color: #14161a;
         border: 1px solid #1c1f24;
@@ -31,28 +31,18 @@ st.markdown("""
         position: relative;
         transition: all 0.4s ease-in-out;
     }
-    
     .card-container:hover {
         border-color: #00C3FF;
         box-shadow: 0 0 25px rgba(0, 195, 255, 0.2);
         transform: translateY(-5px);
     }
-
     .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 5px; }
     .status-label { color: #8a8d91; font-size: 0.9rem; margin-bottom: 15px; }
     .status-value { color: #00C3FF; font-weight: 600; }
-    
-    /* Texto de indicação de clique */
-    .click-helper {
-        color: #00C3FF;
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
+    .click-helper { color: #00C3FF; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
 
-    /* BOTÃO INVISÍVEL SOBRE O CARD */
-    div.stButton > button {
+    /* BOTÃO INVISÍVEL (Apenas para os cards da Home) */
+    .home-card-btn div.stButton > button {
         position: relative;
         width: 100%;
         height: 180px !important;
@@ -64,30 +54,28 @@ st.markdown("""
         cursor: pointer;
     }
 
-    /* ESTILO DO BOTÃO DE VOLTAR */
-    .btn-voltar div.stButton > button {
-        margin-top: 0 !important;
-        height: auto !important;
-        width: auto !important;
+    /* ESTILO DO BOTÃO DE VOLTAR (Totalmente isolado) */
+    .btn-voltar-container div.stButton > button {
         background-color: #1c1f24 !important;
         color: #ffffff !important;
         border: 1px solid #30363d !important;
-        padding: 10px 20px !important;
+        padding: 8px 20px !important;
         border-radius: 8px !important;
-        z-index: 1000 !important;
+        font-weight: 600 !important;
+        margin-bottom: 20px !important;
+        width: auto !important;
+        height: auto !important;
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
     }
-    
-    .btn-voltar div.stButton > button:hover {
+    .btn-voltar-container div.stButton > button:hover {
         border-color: #00C3FF !important;
         color: #00C3FF !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROTEADOR DE PÁGINAS ---
+# --- ROTEADOR ---
 
 if st.session_state.pagina_ativa == 'main':
     st.markdown('<p style="text-align:center; font-size:2.8rem; font-weight:800; color:white; margin-top:2rem;">Hub de Inteligência Contábil</p>', unsafe_allow_html=True)
@@ -105,7 +93,10 @@ if st.session_state.pagina_ativa == 'main':
                 <p class="click-helper">Acessar ferramenta →</p>
             </div>
         """, unsafe_allow_html=True)
+        # Usamos uma div para aplicar o CSS apenas aqui
+        st.markdown('<div class="home-card-btn">', unsafe_allow_html=True)
         st.button("Abrir Zoox", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
@@ -115,28 +106,26 @@ if st.session_state.pagina_ativa == 'main':
                 <p class="click-helper">Acessar ferramenta →</p>
             </div>
         """, unsafe_allow_html=True)
+        st.markdown('<div class="home-card-btn">', unsafe_allow_html=True)
         st.button("Abrir Estante", key="btn_estante", on_click=mudar_pagina, args=('estante',))
+        st.markdown('</div>', unsafe_allow_html=True)
 
 elif st.session_state.pagina_ativa == 'zoox':
-    # BOTÃO DE VOLTAR
-    st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
-    st.button("⬅ Voltar ao Hub Principal", on_click=mudar_pagina, args=('main',))
+    # BOTÃO DE VOLTAR COM CONTAINER PRÓPRIO
+    st.markdown('<div class="btn-voltar-container">', unsafe_allow_html=True)
+    st.button("← Voltar ao Hub", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("🚀 Automação Zoox Tecnologia")
     st.subheader("Integração Folha x CMFlex")
     st.info("Área de processamento para os arquivos da Zoox.")
-    
     st.file_uploader("Arraste o relatório aqui", type=['xlsx', 'csv'])
 
 elif st.session_state.pagina_ativa == 'estante':
-    # BOTÃO DE VOLTAR
-    st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
-    st.button("⬅ Voltar ao Hub Principal", on_click=mudar_pagina, args=('main',))
+    st.markdown('<div class="btn-voltar-container">', unsafe_allow_html=True)
+    st.button("← Voltar ao Hub", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("📦 Automação Estante Mágica")
     st.subheader("Integração Folha x MXM")
-    
-    st.date_input("Selecione o período da folha")
-    st.button("Gerar Lançamentos Contábeis")
+    st.date_input("Selecione o período")
