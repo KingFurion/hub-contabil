@@ -1,41 +1,43 @@
 import streamlit as st
 
-# Configuração da página
-st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide", initial_sidebar_state="collapsed")
+# 1. Configuração da página (deve ser o primeiro comando)
+st.set_page_config(
+    page_title="Hub de Inteligência Contábil", 
+    layout="wide", 
+    initial_sidebar_state="collapsed"
+)
 
-# --- CSS Customizado ---
+# 2. CSS Customizado - Removendo menus e estilizando o Hub
 st.markdown("""
 <style>
-    /* REMOVER MENU LATERAL */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+    
+    /* Remove a barra lateral completamente */
     [data-testid="stSidebar"] {
         display: none;
     }
-    
-    /* REMOVER BOTÃO DE OPÇÕES (Hambúrguer no topo direito) - Opcional */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
 
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+    /* Remove o cabeçalho padrão do Streamlit (botões de Deploy, Menu, etc) */
+    header { visibility: hidden; }
     
-    /* ... Restante do seu CSS de cores e cards ... */
-""", unsafe_allow_html=True)
-
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
-    
-    html, body, [data-testid="stSidebar"] {
+    /* Estilização Geral */
+    html, body, [data-testid="stAppViewBlockContainer"] {
         font-family: 'Poppins', sans-serif;
+        background-color: #0b0c0f;
     }
 
-    /* Fundo Grafite Profundo */
-    .main { background-color: #0b0c0f; }
+    /* Container do conteúdo principal */
+    .main { 
+        background-color: #0b0c0f; 
+    }
     
-    /* Título Limpo */
+    /* Título e Subtítulo */
     .hero-title {
         text-align: center;
         font-size: 2.8rem !important;
         font-weight: 800;
         color: #ffffff;
+        margin-top: 2rem;
         margin-bottom: 5px;
         letter-spacing: -1px;
     }
@@ -48,38 +50,39 @@ st.markdown("""
         margin-bottom: 3rem;
     }
 
-    /* Estilo do Card Clean */
+    /* Estilo do Card Clean SaaS */
     .card {
         background-color: #14161a;
         border: 1px solid #1c1f24;
         border-radius: 12px;
-        padding: 24px;
-        transition: 0.3s ease-in-out;
-        height: 140px;
-        margin-bottom: 10px;
-        cursor: pointer;
+        padding: 30px;
+        transition: all 0.4s ease-in-out;
+        height: 160px;
+        margin-bottom: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        text-decoration: none !important;
     }
     
-    /* Efeito de hover com Azul #00C3FF */
+    /* Efeito de hover com Azul #00C3FF e Glow */
     .card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-5px);
         border-color: #00C3FF;
-        box-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 195, 255, 0.2);
+        background-color: #1c1f24;
     }
 
     .card-title {
         color: #ffffff;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
     .status-label { 
         color: #8a8d91; 
-        font-size: 0.85rem; 
+        font-size: 0.9rem; 
         margin: 0;
     }
     
@@ -88,7 +91,13 @@ st.markdown("""
         font-weight: 600; 
     }
     
+    /* Remove sublinhado de links */
     a { text-decoration: none !important; }
+
+    /* Ajuste de espaçamento entre colunas */
+    [data-testid="column"] {
+        padding: 0 1rem !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -96,11 +105,15 @@ st.markdown("""
 st.markdown('<p class="hero-title">Hub de Inteligência Contábil que Transformam Negócios</p>', unsafe_allow_html=True)
 st.markdown('<p class="hero-subtitle">Soluções tecnológicas integradas para o BPO de alta performance.</p>', unsafe_allow_html=True)
 
-st.divider()
+# Linha divisória sutil
+st.markdown("<hr style='border: 0.5px solid #1c1f24; margin-bottom: 2rem;'>", unsafe_allow_html=True)
+
 st.markdown("### 🛠️ Automação de Folha x Contábil")
+st.write("") # Espaçamento
 
 # Função para criar o card clicável
 def criar_card_clean(titulo, status, chave_url):
+    # Tenta buscar a URL no secrets, senão usa um placeholder
     try:
         url = st.secrets["urls"][chave_url]
     except:
@@ -116,7 +129,7 @@ def criar_card_clean(titulo, status, chave_url):
     """
     return st.markdown(card_html, unsafe_allow_html=True)
 
-# --- GRID COM APENAS 2 CARDS ---
+# --- GRID DE CARDS ---
 col1, col2 = st.columns(2)
 
 with col1:
@@ -124,3 +137,7 @@ with col1:
 
 with col2:
     criar_card_clean("Estante Mágica", "Automação de Folha para MXM", "estante")
+
+# Espaçamento inferior
+st.write("")
+st.write("")
