@@ -1,11 +1,26 @@
 import streamlit as st
 
-# Configuração da página para o estilo Clean SaaS
-st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide")
+# Configuração da página
+st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide", initial_sidebar_state="collapsed")
 
-# --- CSS Customizado (Estilo Puzzle com Glow Azul #00C3FF) ---
+# --- CSS Customizado ---
 st.markdown("""
 <style>
+    /* REMOVER MENU LATERAL */
+    [data-testid="stSidebar"] {
+        display: none;
+    }
+    
+    /* REMOVER BOTÃO DE OPÇÕES (Hambúrguer no topo direito) - Opcional */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+    
+    /* ... Restante do seu CSS de cores e cards ... */
+""", unsafe_allow_html=True)
+
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
     
     html, body, [data-testid="stSidebar"] {
