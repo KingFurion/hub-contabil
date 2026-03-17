@@ -7,10 +7,10 @@ st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide", i
 if 'pagina_ativa' not in st.session_state:
     st.session_state.pagina_ativa = 'main'
 
-def ir_para(nome_pagina):
-    st.session_state.pagina_ativa = nome_pagina
+def mudar_pagina(nome):
+    st.session_state.pagina_ativa = nome
 
-# --- CSS COM CORREÇÃO DE CLIQUE (Z-INDEX) ---
+# --- CSS REFINADO ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
@@ -24,7 +24,7 @@ st.markdown("""
         border: 1px solid #1c1f24;
         border-radius: 12px;
         padding: 30px;
-        height: 160px;
+        height: 180px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -38,25 +38,33 @@ st.markdown("""
         transform: translateY(-5px);
     }
 
-    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
-    .status-label { color: #8a8d91; font-size: 0.9rem; }
+    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 5px; }
+    .status-label { color: #8a8d91; font-size: 0.9rem; margin-bottom: 15px; }
     .status-value { color: #00C3FF; font-weight: 600; }
+    
+    /* Texto de indicação de clique */
+    .click-helper {
+        color: #00C3FF;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-    /* BOTÃO INVISÍVEL - O SEGREDO DO CLIQUE */
-    /* Usamos margin-top negativa para puxar o botão exatamente para cima do card anterior */
+    /* BOTÃO INVISÍVEL SOBRE O CARD */
     div.stButton > button {
         position: relative;
         width: 100%;
-        height: 160px !important;
-        margin-top: -160px; /* Alinha o botão com o topo do card */
+        height: 180px !important;
+        margin-top: -180px; 
         background-color: transparent !important;
         color: transparent !important;
         border: none !important;
-        z-index: 9999 !important; /* Força o botão a ficar na frente de tudo */
+        z-index: 999 !important;
         cursor: pointer;
     }
 
-    /* Botão de Voltar (Página Interna) */
+    /* ESTILO DO BOTÃO DE VOLTAR */
     .btn-voltar div.stButton > button {
         margin-top: 0 !important;
         height: auto !important;
@@ -65,11 +73,21 @@ st.markdown("""
         color: #ffffff !important;
         border: 1px solid #30363d !important;
         padding: 10px 20px !important;
+        border-radius: 8px !important;
+        z-index: 1000 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+    
+    .btn-voltar div.stButton > button:hover {
+        border-color: #00C3FF !important;
+        color: #00C3FF !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROTEADOR ---
+# --- ROTEADOR DE PÁGINAS ---
 
 if st.session_state.pagina_ativa == 'main':
     st.markdown('<p style="text-align:center; font-size:2.8rem; font-weight:800; color:white; margin-top:2rem;">Hub de Inteligência Contábil</p>', unsafe_allow_html=True)
@@ -80,39 +98,45 @@ if st.session_state.pagina_ativa == 'main':
     col1, col2 = st.columns(2)
 
     with col1:
-        # 1. Primeiro desenha o card
         st.markdown("""
             <div class="card-container">
                 <div class="card-title">Zoox Tecnologia</div>
                 <p class="status-label">Status: <span class="status-value">Folha para CMFlex</span></p>
+                <p class="click-helper">Acessar ferramenta →</p>
             </div>
         """, unsafe_allow_html=True)
-        # 2. Depois coloca o botão (o CSS vai "puxar" ele para cima do card)
-        st.button("Abrir Zoox", key="btn_zoox", on_click=ir_para, args=('zoox',))
+        st.button("Abrir Zoox", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
 
     with col2:
         st.markdown("""
             <div class="card-container">
                 <div class="card-title">Estante Mágica</div>
                 <p class="status-label">Status: <span class="status-value">Folha para MXM</span></p>
+                <p class="click-helper">Acessar ferramenta →</p>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Abrir Estante", key="btn_estante", on_click=ir_para, args=('estante',))
+        st.button("Abrir Estante", key="btn_estante", on_click=mudar_pagina, args=('estante',))
 
 elif st.session_state.pagina_ativa == 'zoox':
+    # BOTÃO DE VOLTAR
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
-    st.button("← Voltar ao Hub", on_click=ir_para, args=('main',))
+    st.button("⬅ Voltar ao Hub Principal", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("🚀 Automação Zoox Tecnologia")
-    st.info("Configuração pronta para processar arquivos CMFlex.")
-    st.file_uploader("Upload do arquivo", type=['xlsx', 'csv'])
+    st.subheader("Integração Folha x CMFlex")
+    st.info("Área de processamento para os arquivos da Zoox.")
+    
+    st.file_uploader("Arraste o relatório aqui", type=['xlsx', 'csv'])
 
 elif st.session_state.pagina_ativa == 'estante':
+    # BOTÃO DE VOLTAR
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
-    st.button("← Voltar ao Hub", on_click=ir_para, args=('main',))
+    st.button("⬅ Voltar ao Hub Principal", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("📦 Automação Estante Mágica")
-    st.info("Configuração pronta para processar arquivos MXM.")
-    st.date_input("Mês da Competência")
+    st.subheader("Integração Folha x MXM")
+    
+    st.date_input("Selecione o período da folha")
+    st.button("Gerar Lançamentos Contábeis")
