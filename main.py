@@ -10,7 +10,7 @@ if 'pagina_ativa' not in st.session_state:
 def mudar_pagina(nome):
     st.session_state.pagina_ativa = nome
 
-# --- CSS REFINADO (Alinhamento Interno) ---
+# --- CSS REFINADO (Correção de Largura e Alinhamento) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
@@ -18,43 +18,47 @@ st.markdown("""
     [data-testid="stSidebar"], header { display: none; }
     .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Container para agrupar texto e botão */
+    /* Forçar a coluna a não ter padding extra que esmague o card */
+    [data-testid="column"] {
+        width: 100% !important;
+    }
+
+    /* Container Principal do Card */
     .card-wrapper {
         position: relative;
+        width: 100%;
         height: 180px;
         margin-bottom: 20px;
     }
 
-    /* Posicionamento do texto dentro do card */
+    /* Conteúdo de texto sobreposto */
     .card-content {
         position: absolute;
         top: 25px;
         left: 25px;
-        z-index: 2;
-        pointer-events: none; /* Clique passa para o botão */
+        z-index: 5; /* Garante que fique acima de tudo */
+        pointer-events: none;
     }
 
     .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin: 0; }
     .status-label { color: #8a8d91; font-size: 0.85rem; margin-top: 5px; }
     .status-value { color: #00C3FF; font-weight: 600; }
 
-    /* O BOTÃO QUE É O CARD */
+    /* O BOTÃO QUE SE TORNA O CARD */
     div.stButton > button {
         background-color: #14161a !important;
         border: 1px solid #1c1f24 !important;
         border-radius: 12px !important;
         height: 180px !important;
-        width: 100% !important;
+        width: 100% !important; /* Ocupa toda a largura da coluna */
         transition: all 0.4s ease-in-out !important;
-        position: relative;
-        z-index: 1;
         display: flex !important;
-        align-items: flex-end !important; /* Texto do botão (Acessar) fica embaixo */
+        align-items: flex-end !important;
         justify-content: flex-start !important;
         padding: 25px !important;
         color: #00C3FF !important;
         font-weight: 600 !important;
-        text-align: left !important;
+        text-decoration: none !important;
     }
 
     div.stButton > button:hover {
@@ -64,13 +68,12 @@ st.markdown("""
         background-color: #1c1f24 !important;
     }
 
-    /* Botão de Voltar */
+    /* Ajuste para o botão de voltar nas páginas internas */
     .btn-voltar div.stButton > button {
         height: auto !important;
         width: auto !important;
         background-color: transparent !important;
-        border: 1px solid #30363d !important;
-        color: #8a8d91 !important;
+        padding: 10px 20px !important;
         margin-bottom: 20px !important;
         align-items: center !important;
     }
@@ -85,6 +88,8 @@ if st.session_state.pagina_ativa == 'main':
     st.divider()
     
     st.markdown("### 🛠️ Automação de Folha x Contábil")
+    
+    # Grid de 2 colunas
     col1, col2 = st.columns(2)
 
     with col1:
@@ -115,8 +120,8 @@ elif st.session_state.pagina_ativa == 'zoox':
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("🚀 Automação Zoox Tecnologia")
-    st.info("Integração Folha x CMFlex.")
-    st.file_uploader("Arraste o relatório aqui", type=['xlsx', 'csv'])
+    st.info("Área funcional para o processamento de folha CMFlex.")
+    st.file_uploader("Upload do relatório", type=['xlsx', 'csv'])
 
 elif st.session_state.pagina_ativa == 'estante':
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
@@ -124,4 +129,5 @@ elif st.session_state.pagina_ativa == 'estante':
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("📦 Automação Estante Mágica")
-    st.info("Integração Folha x MXM.")
+    st.info("Área funcional para o processamento de folha MXM.")
+    st.date_input("Selecione a competência")
