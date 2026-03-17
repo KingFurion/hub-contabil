@@ -10,7 +10,7 @@ if 'pagina_ativa' not in st.session_state:
 def mudar_pagina(nome):
     st.session_state.pagina_ativa = nome
 
-# --- CSS REFINADO (Correção de Largura e Alinhamento) ---
+# --- CSS PARA MANTER O DESIGN ORIGINAL E TORNAR CLICÁVEL ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
@@ -18,64 +18,60 @@ st.markdown("""
     [data-testid="stSidebar"], header { display: none; }
     .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Forçar a coluna a não ter padding extra que esmague o card */
-    [data-testid="column"] {
-        width: 100% !important;
-    }
-
-    /* Container Principal do Card */
-    .card-wrapper {
+    /* Estilo do Card Original */
+    .card-container {
+        background-color: #14161a;
+        border: 1px solid #1c1f24;
+        border-radius: 12px;
+        padding: 30px;
+        transition: all 0.4s ease-in-out;
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         position: relative;
-        width: 100%;
-        height: 180px;
-        margin-bottom: 20px;
+    }
+    
+    .card-container:hover {
+        border-color: #00C3FF;
+        box-shadow: 0 0 25px rgba(0, 195, 255, 0.2);
+        transform: translateY(-5px);
     }
 
-    /* Conteúdo de texto sobreposto */
-    .card-content {
-        position: absolute;
-        top: 25px;
-        left: 25px;
-        z-index: 5; /* Garante que fique acima de tudo */
-        pointer-events: none;
-    }
-
-    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin: 0; }
-    .status-label { color: #8a8d91; font-size: 0.85rem; margin-top: 5px; }
+    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
+    .status-label { color: #8a8d91; font-size: 0.9rem; }
     .status-value { color: #00C3FF; font-weight: 600; }
 
-    /* O BOTÃO QUE SE TORNA O CARD */
-    div.stButton > button {
-        background-color: #14161a !important;
-        border: 1px solid #1c1f24 !important;
-        border-radius: 12px !important;
-        height: 180px !important;
-        width: 100% !important; /* Ocupa toda a largura da coluna */
-        transition: all 0.4s ease-in-out !important;
-        display: flex !important;
-        align-items: flex-end !important;
-        justify-content: flex-start !important;
-        padding: 25px !important;
-        color: #00C3FF !important;
-        font-weight: 600 !important;
-        text-decoration: none !important;
+    /* BOTÃO INVISÍVEL QUE COBRE O CARD INTEIRO */
+    .stButton > button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 160px; /* Mesma altura do card */
+        background: transparent !important;
+        color: transparent !important;
+        border: none !important;
+        z-index: 10;
+        cursor: pointer;
+    }
+    
+    .stButton > button:hover {
+        background: transparent !important;
+        color: transparent !important;
+        border: none !important;
     }
 
-    div.stButton > button:hover {
-        border-color: #00C3FF !important;
-        box-shadow: 0 0 25px rgba(0, 195, 255, 0.2) !important;
-        transform: translateY(-5px) !important;
-        background-color: #1c1f24 !important;
-    }
-
-    /* Ajuste para o botão de voltar nas páginas internas */
+    /* Botão de Voltar para as páginas internas */
     .btn-voltar div.stButton > button {
-        height: auto !important;
-        width: auto !important;
-        background-color: transparent !important;
+        position: relative;
+        height: auto;
+        width: auto;
+        background-color: #1c1f24 !important;
+        color: #ffffff !important;
+        border: 1px solid #30363d !important;
         padding: 10px 20px !important;
-        margin-bottom: 20px !important;
-        align-items: center !important;
+        margin-bottom: 2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -88,31 +84,27 @@ if st.session_state.pagina_ativa == 'main':
     st.divider()
     
     st.markdown("### 🛠️ Automação de Folha x Contábil")
-    
-    # Grid de 2 colunas
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown('<div class="card-wrapper">', unsafe_allow_html=True)
+        # Card Visual (Exatamente como o seu original)
         st.markdown("""
-            <div class="card-content">
+            <div class="card-container">
                 <div class="card-title">Zoox Tecnologia</div>
                 <p class="status-label">Status: <span class="status-value">Folha para CMFlex</span></p>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Acessar Automação →", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Botão invisível posicionado exatamente sobre o card acima
+        st.button("Ir para Zoox", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
 
     with col2:
-        st.markdown('<div class="card-wrapper">', unsafe_allow_html=True)
         st.markdown("""
-            <div class="card-content">
+            <div class="card-container">
                 <div class="card-title">Estante Mágica</div>
                 <p class="status-label">Status: <span class="status-value">Folha para MXM</span></p>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Acessar Automação →", key="btn_estante", on_click=mudar_pagina, args=('estante',))
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.button("Ir para Estante", key="btn_estante", on_click=mudar_pagina, args=('estante',))
 
 elif st.session_state.pagina_ativa == 'zoox':
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
