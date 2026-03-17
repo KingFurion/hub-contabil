@@ -10,7 +10,7 @@ if 'pagina_ativa' not in st.session_state:
 def mudar_pagina(nome):
     st.session_state.pagina_ativa = nome
 
-# --- CSS REFINADO E ISOLADO ---
+# --- CSS REFINADO (Altura reduzida e clique total) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
@@ -18,13 +18,13 @@ st.markdown("""
     [data-testid="stSidebar"], header { display: none; }
     .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Estilo do Card Visual */
+    /* Card Visual com Altura Reduzida */
     .card-container {
         background-color: #14161a;
         border: 1px solid #1c1f24;
         border-radius: 12px;
-        padding: 30px;
-        height: 180px;
+        padding: 25px;
+        height: 140px; /* Altura menor para cobrir apenas o texto */
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -37,16 +37,15 @@ st.markdown("""
         transform: translateY(-5px);
     }
     .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 5px; }
-    .status-label { color: #8a8d91; font-size: 0.9rem; margin-bottom: 15px; }
+    .status-label { color: #8a8d91; font-size: 0.9rem; margin: 0; }
     .status-value { color: #00C3FF; font-weight: 600; }
-    .click-helper { color: #00C3FF; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
 
-    /* BOTÃO INVISÍVEL (Apenas para os cards da Home) */
+    /* BOTÃO INVISÍVEL (Apenas Home) */
     .home-card-btn div.stButton > button {
         position: relative;
         width: 100%;
-        height: 180px !important;
-        margin-top: -180px; 
+        height: 140px !important; /* Casando com a nova altura do card */
+        margin-top: -140px; 
         background-color: transparent !important;
         color: transparent !important;
         border: none !important;
@@ -54,7 +53,7 @@ st.markdown("""
         cursor: pointer;
     }
 
-    /* ESTILO DO BOTÃO DE VOLTAR (Totalmente isolado) */
+    /* BOTÃO DE VOLTAR (Páginas Internas) */
     .btn-voltar-container div.stButton > button {
         background-color: #1c1f24 !important;
         color: #ffffff !important;
@@ -66,7 +65,6 @@ st.markdown("""
         width: auto !important;
         height: auto !important;
         display: flex !important;
-        align-items: center !important;
     }
     .btn-voltar-container div.stButton > button:hover {
         border-color: #00C3FF !important;
@@ -90,10 +88,8 @@ if st.session_state.pagina_ativa == 'main':
             <div class="card-container">
                 <div class="card-title">Zoox Tecnologia</div>
                 <p class="status-label">Status: <span class="status-value">Folha para CMFlex</span></p>
-                <p class="click-helper">Acessar ferramenta →</p>
             </div>
         """, unsafe_allow_html=True)
-        # Usamos uma div para aplicar o CSS apenas aqui
         st.markdown('<div class="home-card-btn">', unsafe_allow_html=True)
         st.button("Abrir Zoox", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
         st.markdown('</div>', unsafe_allow_html=True)
@@ -103,7 +99,6 @@ if st.session_state.pagina_ativa == 'main':
             <div class="card-container">
                 <div class="card-title">Estante Mágica</div>
                 <p class="status-label">Status: <span class="status-value">Folha para MXM</span></p>
-                <p class="click-helper">Acessar ferramenta →</p>
             </div>
         """, unsafe_allow_html=True)
         st.markdown('<div class="home-card-btn">', unsafe_allow_html=True)
@@ -111,14 +106,12 @@ if st.session_state.pagina_ativa == 'main':
         st.markdown('</div>', unsafe_allow_html=True)
 
 elif st.session_state.pagina_ativa == 'zoox':
-    # BOTÃO DE VOLTAR COM CONTAINER PRÓPRIO
     st.markdown('<div class="btn-voltar-container">', unsafe_allow_html=True)
     st.button("← Voltar ao Hub", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.title("🚀 Automação Zoox Tecnologia")
     st.subheader("Integração Folha x CMFlex")
-    st.info("Área de processamento para os arquivos da Zoox.")
     st.file_uploader("Arraste o relatório aqui", type=['xlsx', 'csv'])
 
 elif st.session_state.pagina_ativa == 'estante':
