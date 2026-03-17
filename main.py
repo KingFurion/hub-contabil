@@ -3,15 +3,14 @@ import streamlit as st
 # 1. Configuração da página
 st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide", initial_sidebar_state="collapsed")
 
-# --- INICIALIZAÇÃO DO ESTADO DE NAVEGAÇÃO ---
+# --- ESTADO DE NAVEGAÇÃO ---
 if 'pagina_ativa' not in st.session_state:
     st.session_state.pagina_ativa = 'main'
 
-# Funções de Navegação
 def mudar_pagina(nome):
     st.session_state.pagina_ativa = nome
 
-# --- CSS CUSTOMIZADO (Design com Glow e Botões Invisíveis) ---
+# --- CSS DEFINITIVO (Glow + Botão de Ação) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
@@ -19,77 +18,68 @@ st.markdown("""
     [data-testid="stSidebar"], header { display: none; }
     .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Estilo do Card com Glow */
+    /* Container do Card */
     .card-container {
         background-color: #14161a;
         border: 1px solid #1c1f24;
         border-radius: 12px;
-        padding: 30px;
+        padding: 25px;
         transition: all 0.4s ease-in-out;
-        position: relative;
-        height: 160px;
+        height: 180px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        z-index: 1;
+        justify-content: flex-start;
+        position: relative;
     }
     
     .card-container:hover {
         border-color: #00C3FF;
-        box-shadow: 0 0 25px rgba(0, 195, 255, 0.3);
-        transform: translateY(-5px);
+        box-shadow: 0 0 25px rgba(0, 195, 255, 0.2);
     }
 
-    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
-    .status-label { color: #8a8d91; font-size: 0.9rem; }
+    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-bottom: 5px; }
+    .status-label { color: #8a8d91; font-size: 0.85rem; margin-bottom: 20px; }
     .status-value { color: #00C3FF; font-weight: 600; }
 
-    /* BOTÃO INVISÍVEL POR CIMA DO CARD */
-    .stButton > button {
-        position: relative;
-        margin-top: -175px; /* Sobrepõe o card */
-        height: 160px;
-        width: 100%;
-        background: transparent !important;
-        color: transparent !important;
-        border: none !important;
-        z-index: 2;
-        cursor: pointer;
-    }
-    
-    .stButton > button:hover {
-        background: transparent !important;
-        color: transparent !important;
-        border: none !important;
+    /* Estilização do Botão Nativo do Streamlit para parecer parte do Card */
+    div.stButton > button {
+        background-color: #1c1f24 !important;
+        color: #00C3FF !important;
+        border: 1px solid #00C3FF !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+        font-weight: 600 !important;
+        transition: 0.3s !important;
     }
 
-    /* Estilo do Botão de Voltar "Clean" */
-    .btn-voltar > button {
-        margin-top: 0px !important;
-        height: auto !important;
+    div.stButton > button:hover {
+        background-color: #00C3FF !important;
+        color: #000000 !important;
+        box-shadow: 0 0 15px rgba(0, 195, 255, 0.4) !important;
+    }
+
+    /* Botão de Voltar (Destaque Vermelho/Cinza) */
+    .btn-voltar div.stButton > button {
         width: auto !important;
-        background-color: #1c1f24 !important;
-        color: #ffffff !important;
+        background-color: transparent !important;
+        color: #8a8d91 !important;
         border: 1px solid #30363d !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
         margin-bottom: 2rem !important;
     }
     
-    .btn-voltar > button:hover {
-        border-color: #00C3FF !important;
-        color: #00C3FF !important;
+    .btn-voltar div.stButton > button:hover {
+        color: #ffffff !important;
+        border-color: #ffffff !important;
+        background-color: transparent !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- LÓGICA DE NAVEGAÇÃO ---
+# --- ROTEADOR ---
 
 if st.session_state.pagina_ativa == 'main':
-    # CABEÇALHO DO HUB
-    st.markdown('<p style="text-align:center; font-size:2.8rem; font-weight:800; color:white; margin-top:2rem;">Hub de Inteligência Contábil que Transformam Negócios</p>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align:center; color:#8a8d91; font-size:1.1rem; margin-bottom:3rem;">Soluções tecnológicas integradas para o BPO de alta performance.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align:center; font-size:2.8rem; font-weight:800; color:white; margin-top:2rem;">Hub de Inteligência Contábil</p>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align:center; color:#8a8d91; font-size:1.1rem; margin-bottom:3rem;">Soluções integradas para o BPO de alta performance.</p>', unsafe_allow_html=True)
     st.divider()
     
     st.markdown("### 🛠️ Automação de Folha x Contábil")
@@ -99,39 +89,35 @@ if st.session_state.pagina_ativa == 'main':
         st.markdown("""
             <div class="card-container">
                 <div class="card-title">Zoox Tecnologia</div>
-                <p class="status-label">Status: <span class="status-value">Automação de Folha para CMFlex</span></p>
+                <p class="status-label">Status: <span class="status-value">Folha para CMFlex</span></p>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Click Zoox", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
+        # O botão agora fica visível logo abaixo do texto, indicando a ação
+        st.button("Abrir Automação Zoox", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
 
     with col2:
         st.markdown("""
             <div class="card-container">
                 <div class="card-title">Estante Mágica</div>
-                <p class="status-label">Status: <span class="status-value">Automação de Folha para MXM</span></p>
+                <p class="status-label">Status: <span class="status-value">Folha para MXM</span></p>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Click Estante", key="btn_estante", on_click=mudar_pagina, args=('estante',))
+        st.button("Abrir Automação Estante", key="btn_estante", on_click=mudar_pagina, args=('estante',))
 
 elif st.session_state.pagina_ativa == 'zoox':
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
-    st.button("← Voltar ao Hub", on_click=mudar_pagina, args=('main',))
+    st.button("← Voltar para o Hub Principal", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown('# 🚀 Automação Zoox Tecnologia')
-    st.markdown('### Integração Folha x CMFlex')
-    st.info("Área funcional para processamento de arquivos da Zoox.")
-    
-    # Aqui entra seu código de upload/processamento
-    st.file_uploader("Arraste o relatório CMFlex aqui", type=['xlsx', 'csv'])
+    st.title("🚀 Automação Zoox Tecnologia")
+    st.info("Otimização de processos para CMFlex.")
+    st.file_uploader("Upload do arquivo Zoox", type=['xlsx', 'csv'])
 
 elif st.session_state.pagina_ativa == 'estante':
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
-    st.button("← Voltar ao Hub", on_click=mudar_pagina, args=('main',))
+    st.button("← Voltar para o Hub Principal", on_click=mudar_pagina, args=('main',))
     st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown('# 📦 Automação Estante Mágica')
-    st.markdown('### Integração Folha x MXM')
-    st.info("Área funcional para processamento de arquivos da Estante Mágica.")
-    
-    st.date_input("Selecione o período")
+    st.title("📦 Automação Estante Mágica")
+    st.info("Otimização de processos para MXM.")
+    st.date_input("Data da Competência")
