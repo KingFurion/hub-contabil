@@ -1,143 +1,104 @@
 import streamlit as st
 
-# 1. Configuração da página (deve ser o primeiro comando)
-st.set_page_config(
-    page_title="Hub de Inteligência Contábil", 
-    layout="wide", 
-    initial_sidebar_state="collapsed"
-)
+# 1. Configuração da página - Mantendo o Layout Wide
+st.set_page_config(page_title="Hub de Inteligência Contábil", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. CSS Customizado - Removendo menus e estilizando o Hub
+# --- INICIALIZAÇÃO DO ESTADO DE NAVEGAÇÃO ---
+if 'pagina_ativa' not in st.session_state:
+    st.session_state.pagina_ativa = 'main'
+
+# Funções de Navegação
+def ir_para_zoox(): st.session_state.pagina_ativa = 'zoox'
+def ir_para_estante(): st.session_state.pagina_ativa = 'estante'
+def voltar_ao_hub(): st.session_state.pagina_ativa = 'main'
+
+# --- CSS CUSTOMIZADO (Design Clean SaaS) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
     
-    /* Remove a barra lateral completamente */
-    [data-testid="stSidebar"] {
-        display: none;
-    }
+    /* Esconde barra lateral e elementos padrão */
+    [data-testid="stSidebar"], header { display: none; }
+    .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Remove o cabeçalho padrão do Streamlit (botões de Deploy, Menu, etc) */
-    header { visibility: hidden; }
-    
-    /* Estilização Geral */
-    html, body, [data-testid="stAppViewBlockContainer"] {
-        font-family: 'Poppins', sans-serif;
-        background-color: #0b0c0f;
-    }
-
-    /* Container do conteúdo principal */
-    .main { 
-        background-color: #0b0c0f; 
-    }
-    
-    /* Título e Subtítulo */
-    .hero-title {
-        text-align: center;
-        font-size: 2.8rem !important;
-        font-weight: 800;
-        color: #ffffff;
-        margin-top: 2rem;
-        margin-bottom: 5px;
-        letter-spacing: -1px;
-    }
-    
-    .hero-subtitle {
-        text-align: center;
-        color: #8a8d91;
-        font-size: 1.1rem;
-        font-weight: 300;
-        margin-bottom: 3rem;
-    }
-
-    /* Estilo do Card Clean SaaS */
-    .card {
+    /* Estilo do Card */
+    .card-container {
         background-color: #14161a;
         border: 1px solid #1c1f24;
         border-radius: 12px;
-        padding: 30px;
-        transition: all 0.4s ease-in-out;
-        height: 160px;
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-decoration: none !important;
-    }
-    
-    /* Efeito de hover com Azul #00C3FF e Glow */
-    .card:hover {
-        transform: translateY(-5px);
-        border-color: #00C3FF;
-        box-shadow: 0 10px 30px rgba(0, 195, 255, 0.2);
-        background-color: #1c1f24;
-    }
-
-    .card-title {
-        color: #ffffff;
-        font-size: 1.3rem;
-        font-weight: 600;
+        padding: 24px;
+        transition: 0.3s ease-in-out;
         margin-bottom: 10px;
     }
-
-    .status-label { 
-        color: #8a8d91; 
-        font-size: 0.9rem; 
-        margin: 0;
+    .card-container:hover {
+        border-color: #00C3FF;
+        box-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
     }
-    
-    .status-value { 
-        color: #00C3FF; 
-        font-weight: 600; 
-    }
-    
-    /* Remove sublinhado de links */
-    a { text-decoration: none !important; }
+    .card-title { color: #ffffff; font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+    .status-label { color: #8a8d91; font-size: 0.85rem; }
+    .status-value { color: #00C3FF; font-weight: 600; }
 
-    /* Ajuste de espaçamento entre colunas */
-    [data-testid="column"] {
-        padding: 0 1rem !important;
+    /* Deixar o botão do Streamlit invisível por cima do card */
+    div.stButton > button {
+        background-color: transparent;
+        border: none;
+        color: transparent;
+        height: 140px;
+        width: 100%;
+        position: absolute;
+        top: -150px; /* Ajuste dependendo do layout */
+        z-index: 10;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- CABEÇALHO ---
-st.markdown('<p class="hero-title">Hub de Inteligência Contábil que Transformam Negócios</p>', unsafe_allow_html=True)
-st.markdown('<p class="hero-subtitle">Soluções tecnológicas integradas para o BPO de alta performance.</p>', unsafe_allow_html=True)
+# --- LÓGICA DE RENDERIZAÇÃO ---
 
-# Linha divisória sutil
-st.markdown("<hr style='border: 0.5px solid #1c1f24; margin-bottom: 2rem;'>", unsafe_allow_html=True)
-
-st.markdown("### 🛠️ Automação de Folha x Contábil")
-st.write("") # Espaçamento
-
-# Função para criar o card clicável
-def criar_card_clean(titulo, status, chave_url):
-    # Tenta buscar a URL no secrets, senão usa um placeholder
-    try:
-        url = st.secrets["urls"][chave_url]
-    except:
-        url = "#"
+# PÁGINA PRINCIPAL (HUB)
+if st.session_state.pagina_ativa == 'main':
+    st.markdown('<p style="text-align:center; font-size:2.8rem; font-weight:800; color:white; margin-top:2rem;">Hub de Inteligência Contábil que Transformam Negócios</p>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align:center; color:#8a8d91; font-size:1.1rem; margin-bottom:3rem;">Soluções tecnológicas integradas para o BPO de alta performance.</p>', unsafe_allow_html=True)
     
-    card_html = f"""
-    <a href="{url}" target="_blank">
-        <div class="card">
-            <div class="card-title">{titulo}</div>
-            <p class="status-label">Status: <span class="status-value">{status}</span></p>
+    st.divider()
+    st.markdown("### 🛠️ Automação de Folha x Contábil")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # Card Visual
+        st.markdown(f"""
+        <div class="card-container">
+            <div class="card-title">Zoox Tecnologia</div>
+            <p class="status-label">Status: <span class="status-value">Automação de Folha para CMFlex</span></p>
         </div>
-    </a>
-    """
-    return st.markdown(card_html, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+        # Botão Invisível que captura o clique
+        st.button("Acessar Zoox", key="btn_zoox", on_click=ir_para_zoox, use_container_width=True)
 
-# --- GRID DE CARDS ---
-col1, col2 = st.columns(2)
+    with col2:
+        st.markdown(f"""
+        <div class="card-container">
+            <div class="card-title">Estante Mágica</div>
+            <p class="status-label">Status: <span class="status-value">Automação de Folha para MXM</span></p>
+        </div>
+        """, unsafe_allow_html=True)
+        st.button("Acessar Estante", key="btn_estante", on_click=ir_para_estante, use_container_width=True)
 
-with col1:
-    criar_card_clean("Zoox Tecnologia", "Automação de Folha para CMFlex", "zoox")
+# PÁGINA ZOOX
+elif st.session_state.pagina_ativa == 'zoox':
+    st.button("⬅️ Voltar ao Hub", on_click=voltar_ao_hub)
+    st.title("🚀 Automação Zoox Tecnologia")
+    st.subheader("Integração Folha x CMFlex")
+    st.info("Área funcional para processamento de arquivos da Zoox.")
+    # Coloque aqui o seu código de automação para a Zoox
+    upload = st.file_uploader("Arraste o relatório CMFlex aqui", type=['xlsx', 'csv'])
 
-with col2:
-    criar_card_clean("Estante Mágica", "Automação de Folha para MXM", "estante")
-
-# Espaçamento inferior
-st.write("")
-st.write("")
+# PÁGINA ESTANTE MÁGICA
+elif st.session_state.pagina_ativa == 'estante':
+    st.button("⬅️ Voltar ao Hub", on_click=voltar_ao_hub)
+    st.title("📦 Automação Estante Mágica")
+    st.subheader("Integração Folha x MXM")
+    st.info("Área funcional para processamento de arquivos da Estante Mágica.")
+    # Coloque aqui o seu código de automação para a Estante Mágica
+    data = st.date_input("Selecione o período da competência")
+    st.button("Executar Conciliação MXM")
