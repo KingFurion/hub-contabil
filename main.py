@@ -10,28 +10,35 @@ if 'pagina_ativa' not in st.session_state:
 def mudar_pagina(nome):
     st.session_state.pagina_ativa = nome
 
-# --- CSS DEFINITIVO (O Botão se torna o Card) ---
+# --- CSS REFINADO (Alinhamento Interno) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
     
-    /* Limpeza de interface */
     [data-testid="stSidebar"], header { display: none; }
     .main { background-color: #0b0c0f; font-family: 'Poppins', sans-serif; }
 
-    /* Estilização dos Títulos dentro do Hub */
-    .card-text {
-        margin-bottom: -45px; /* Puxa o texto para cima do botão */
+    /* Container para agrupar texto e botão */
+    .card-wrapper {
         position: relative;
-        z-index: 1;
-        pointer-events: none; /* Garante que o clique passe para o botão abaixo */
-        padding-left: 25px;
+        height: 180px;
+        margin-bottom: 20px;
     }
-    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin-top: 30px;}
-    .status-label { color: #8a8d91; font-size: 0.85rem; }
+
+    /* Posicionamento do texto dentro do card */
+    .card-content {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        z-index: 2;
+        pointer-events: none; /* Clique passa para o botão */
+    }
+
+    .card-title { color: #ffffff; font-size: 1.3rem; font-weight: 600; margin: 0; }
+    .status-label { color: #8a8d91; font-size: 0.85rem; margin-top: 5px; }
     .status-value { color: #00C3FF; font-weight: 600; }
 
-    /* O BOTÃO QUE SE TORNA O CARD */
+    /* O BOTÃO QUE É O CARD */
     div.stButton > button {
         background-color: #14161a !important;
         border: 1px solid #1c1f24 !important;
@@ -39,11 +46,14 @@ st.markdown("""
         height: 180px !important;
         width: 100% !important;
         transition: all 0.4s ease-in-out !important;
+        position: relative;
+        z-index: 1;
         display: flex !important;
-        align-items: flex-end !important;
+        align-items: flex-end !important; /* Texto do botão (Acessar) fica embaixo */
         justify-content: flex-start !important;
-        padding: 20px !important;
-        color: #00C3FF !important; /* Cor do texto do botão (Acessar) */
+        padding: 25px !important;
+        color: #00C3FF !important;
+        font-weight: 600 !important;
         text-align: left !important;
     }
 
@@ -54,7 +64,7 @@ st.markdown("""
         background-color: #1c1f24 !important;
     }
 
-    /* Botão de Voltar (Específico para as páginas internas) */
+    /* Botão de Voltar */
     .btn-voltar div.stButton > button {
         height: auto !important;
         width: auto !important;
@@ -62,6 +72,7 @@ st.markdown("""
         border: 1px solid #30363d !important;
         color: #8a8d91 !important;
         margin-bottom: 20px !important;
+        align-items: center !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -77,23 +88,26 @@ if st.session_state.pagina_ativa == 'main':
     col1, col2 = st.columns(2)
 
     with col1:
-        # Texto sobreposto ao botão
+        st.markdown('<div class="card-wrapper">', unsafe_allow_html=True)
         st.markdown("""
-            <div class="card-text">
+            <div class="card-content">
                 <div class="card-title">Zoox Tecnologia</div>
                 <p class="status-label">Status: <span class="status-value">Folha para CMFlex</span></p>
             </div>
         """, unsafe_allow_html=True)
         st.button("Acessar Automação →", key="btn_zoox", on_click=mudar_pagina, args=('zoox',))
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
+        st.markdown('<div class="card-wrapper">', unsafe_allow_html=True)
         st.markdown("""
-            <div class="card-text">
+            <div class="card-content">
                 <div class="card-title">Estante Mágica</div>
                 <p class="status-label">Status: <span class="status-value">Folha para MXM</span></p>
             </div>
         """, unsafe_allow_html=True)
         st.button("Acessar Automação →", key="btn_estante", on_click=mudar_pagina, args=('estante',))
+        st.markdown('</div>', unsafe_allow_html=True)
 
 elif st.session_state.pagina_ativa == 'zoox':
     st.markdown('<div class="btn-voltar">', unsafe_allow_html=True)
